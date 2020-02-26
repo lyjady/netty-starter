@@ -1,4 +1,4 @@
-package org.augustus.nio;
+package org.augustus.nio.buffer;
 
 import java.nio.IntBuffer;
 
