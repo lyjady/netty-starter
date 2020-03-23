@@ -8,6 +8,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.awt.print.Pageable;
+
 /**
  * @author LinYongJin
  * @date 2020/3/18 20:56
@@ -34,7 +36,11 @@ public class NettyClient {
 
             // 启动客户端连接服务器, 并设置成同步的
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8080).sync();
-            System.out.println(channelFuture.channel().localAddress() + "启动");
+            channelFuture.addListener(future -> {
+                if (future.isSuccess()) {
+                    System.out.println("客户端启动监听器: 客户端启动成功");
+                }
+            });
             // 设置通道关闭的监听
             channelFuture.channel().closeFuture().sync();
         } finally {

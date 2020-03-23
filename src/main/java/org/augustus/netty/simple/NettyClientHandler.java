@@ -2,6 +2,7 @@ package org.augustus.netty.simple;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -14,6 +15,7 @@ import java.util.Scanner;
  * @author LinYongJin
  * @date 2020/3/18 21:06
  */
+//@Slf4j
 public class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
     /**
@@ -23,10 +25,14 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.print("请输入要发送给服务器的消息: ");
-//        String message = scanner.nextLine();
-        ctx.writeAndFlush(Unpooled.copiedBuffer("I am inevitable", StandardCharsets.UTF_8));
+        ChannelFuture channelFuture = ctx.writeAndFlush(Unpooled.copiedBuffer("I am inevitable", StandardCharsets.UTF_8)).sync();
+        channelFuture.addListener(future -> {
+            if (future.isSuccess()) {
+                System.out.println("向服务端发送消息监听器: 发送给服务器成功!!!");
+            } else {
+                System.out.println("向服务端发送消息监听器: 发送给服务器失败~~~");
+            }
+        });
     }
 
     /**

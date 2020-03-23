@@ -2,10 +2,7 @@ package org.augustus.netty.simple;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelPipeline;
+import io.netty.channel.*;
 import io.netty.channel.socket.SocketChannel;
 
 import java.nio.charset.StandardCharsets;
@@ -17,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @author LinYongJin
  * @date 2020/3/18 20:35
  */
+//@Slf4j
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     /**
@@ -83,7 +81,16 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         // 将数据写入缓冲并刷新(刷新就是将数据写到通道)
-        ctx.channel().writeAndFlush(Unpooled.copiedBuffer("服务器收到你的消息了, 装发给其他人!!!", StandardCharsets.UTF_8));
+        ChannelFuture channelFuture = ctx.channel().writeAndFlush(Unpooled.copiedBuffer("服务器收到你的消息了, 装发给其他人!!!", StandardCharsets.UTF_8)).sync();
+        channelFuture.addListener(future -> {
+            if (future.isSuccess()) {
+                if (future.isSuccess()) {
+                    System.out.println("向客户端发送消息监听器: 发送给客户端成功!!!");
+                } else {
+                    System.out.println("向客户端发送消息监听器: 发送给客户端失败~~~");
+                }
+            }
+        });
     }
 
     /**
