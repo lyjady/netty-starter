@@ -1,10 +1,7 @@
 package org.augustus.netty.simple;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -41,8 +38,9 @@ public class NettyServer {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         socketChannels.add(socketChannel);
+                        ChannelPipeline channelPipeline = socketChannel.pipeline();
                         // 向管道中添加处理器
-                        socketChannel.pipeline().addLast(new NettyServerHandler());
+                        channelPipeline.addLast(new NettyServerHandler());
                     }
                 });
         // 3.为服务器绑定端口并设置成同步的
