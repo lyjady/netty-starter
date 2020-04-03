@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Client</title>
+    <style>
+        textarea {
+            width: 400px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <textarea id="client"></textarea>
+    <input type="button" id="client-btn" value="发送" onclick="sendMessage()"/>
+    <textarea id="server"></textarea>
+    <input type="button" onclick="document.getElementById('server').value = ''" value="清除"/>
+    <script type="text/javascript">
+        let websocket = null;
+        const server = document.getElementById('server');
+        const client = document.getElementById('client');
+        websocket = new WebSocket('ws://localhost:8080/netty');
+        websocket.onopen = function (evt) {
+            if (evt.type === 'open') {
+                server.value = '成功连接服务器' + "\n";
+            }
+        };
+        websocket.onmessage = function (evt) {
+            server.value += evt.data + "\n";
+        };
+        websocket.onclose = function () {
+            server.value = '与服务器断开连接' + "\n";
+        }
+
+        function sendMessage() {
+            const message = client.value;
+            client.value = '';
+            websocket.send(message);
+        }
+    </script>
+</body>
+</html>

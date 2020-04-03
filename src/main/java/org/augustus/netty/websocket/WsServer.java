@@ -47,7 +47,7 @@ public class WsServer {
                             // 这个Handler还可以将Http协议升级成WebSocket, 保持长连接。
                             pipeline.addLast(new WebSocketServerProtocolHandler("/netty"));
                             // 自定义的Handler处理业务逻辑
-                            pipeline.addLast(null);
+                            pipeline.addLast(new WsServerHandler());
                         }
                     });
             ChannelFuture sync = serverBootstrap.bind("127.0.0.1", 8080).sync();
