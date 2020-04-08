@@ -1,0 +1,31 @@
+syntax = "proto3";
+// 加快解析
+option optimize_for = SPEED;
+option java_outer_classname = "PeoplePoJo";
+
+message People {
+    enum DataType {
+        // 枚举规定从0开始
+        BossType = 0;
+        WorkerType = 1;
+    }
+    // 用DataType来标识传的哪一个枚举类型(1是指第一个属性)
+    DataType data_type = 1;
+
+    // 表示每次枚举类型最多只能出现一个
+    oneof dataBody {
+        Boss boss = 2;
+        worker worker = 3;
+    }
+
+}
+
+message Boss {
+    int32 id = 1;
+    string name = 2;
+}
+
+message worker {
+    int32 no = 1;
+    string nickname = 2;
+}

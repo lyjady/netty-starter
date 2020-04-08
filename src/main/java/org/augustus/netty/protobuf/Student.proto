@@ -1,0 +1,11 @@
+syntax = "proto3";
+// 外部类名
+option java_outer_classname = "StudentPoJo";
+// protpbuf用message管理数据
+// Student内部类
+message Studnet {
+    // 1是一个属性, 属性名是id
+    int32 id = 1;
+    // 2是第二个属性
+    string name = 2;
+}
