@@ -20,6 +20,7 @@ public class BoundDataDecoder extends ByteToMessageDecoder {
      */
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+        System.out.println("BoundDataDecoder.decode");
         // 当ByteBuf中的值大于等于8时才满足long类型的字节数
         if (in.readableBytes() >= 8) {
             out.add(in.readLong());

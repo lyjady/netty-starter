@@ -1,19 +1,20 @@
-package org.augustus.netty.inoutbound;
+package org.augustus.netty.tcp;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
-import org.augustus.netty.protobuf.NettyServerHandler;
-import org.augustus.netty.protobuf.PeoplePoJo;
+import org.augustus.netty.inoutbound.BoundDataDecoder;
+import org.augustus.netty.inoutbound.BoundDataEncoder;
+import org.augustus.netty.inoutbound.BoundServerHandler;
+import org.augustus.netty.simple.NettyServerHandler;
 
 /**
  * @author LinYongJin
- * @date 2020/4/8 21:52
+ * @date 2020/4/13 21:19
  */
-public class BoundNettyServer {
+public class TcpNettyServer {
 
     public static void main(String[] args) {
         EventLoopGroup boosGroup = new NioEventLoopGroup(1);
@@ -28,12 +29,7 @@ public class BoundNettyServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline channelPipeline = socketChannel.pipeline();
-                            // 加入自定义的解码器
-                            channelPipeline.addLast(new BoundDataDecoder());
-                            // 加入自定义的编码器
-                            channelPipeline.addLast(new BoundDataEncoder());
-                            // 加入自定义的业务处理器
-                            channelPipeline.addLast(new BoundServerHandler());
+                            channelPipeline.addLast(new TcpServerHandler());
                         }
                     });
             ChannelFuture channelFuture = bootstrap.bind(8080).sync();
